@@ -1,26 +1,18 @@
 import axios from 'axios';
 
-// Create a new Axios instance with a base URL for our API.
-const api = axios.create({
-  baseURL: '/api', 
-});
+// for prod, set VITE_API_BASE_URL to your backend: https://your-backend.onrender.com/api
+// for dev, Vite proxy handles /api to http://localhost:5555
+const baseURL = import.meta.env.VITE_API_BASE_URL || '/api';
 
-// This interceptor function runs before each request is sent.
-// Its purpose is to automatically attach the JWT token to every outgoing request,
-// so we don't have to do it manually in every component.
+const api = axios.create({ baseURL });
+
 api.interceptors.request.use(
   (config) => {
-    // Retrieve the token from localStorage
     const token = localStorage.getItem('token');
-    if (token) {
-      // If the token exists, add it to the Authorization header
-      config.headers['Authorization'] = `Bearer ${token}`;
-    }
+    if (token) config.headers['Authorization'] = `Bearer ${token}`;
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 export default api;

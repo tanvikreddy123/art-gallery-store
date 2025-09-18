@@ -1,8 +1,3 @@
-/**
- * This module contains the database connection logic for MongoDB using Mongoose.
- * It reads the connection string from the environment variables and establishes a persistent connection.
- */
-
 import mongoose from 'mongoose';
 
 const connectDB = async () => {

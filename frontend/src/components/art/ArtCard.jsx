@@ -6,25 +6,46 @@ import { MdOutlineDelete } from 'react-icons/md';
 import { getCurrentUser } from '../../services/authService';
 
 const ArtCard = ({ artPiece }) => {
-    const currentUser = getCurrentUser(); 
+  const currentUser = getCurrentUser();
 
-  // This logic checks if the currently logged-in user is the owner of the art piece.
-  // This is the client-side authorization check that determines whether to show
-  // the edit and delete controls.
+  // small client-side check for showing edit/delete only to owner
   const isOwner = currentUser && currentUser.id === artPiece.user;
+
+  
+  const priceLabel = Number(artPiece?.price ?? 0).toLocaleString('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
+
+  // fallback so broken links don't break the card 
+  const handleImgError = (e) => {
+    e.currentTarget.onerror = null; // avoid loop
+    e.currentTarget.src = '/placeholder.jpg';
+  };
+
   return (
     <div className='art-card'>
-      <img src={artPiece.imageUrl} alt={artPiece.title} className='art-card-image' />
+      <img
+        src={artPiece.imageUrl}
+        alt={artPiece.title}
+        className="art-card-image"
+        loading="lazy"
+        onError={handleImgError}
+      />
+
+
       <div className='art-card-content'>
         <h3 className='art-card-title'>{artPiece.title}</h3>
         <p className='art-card-artist'>by {artPiece.artist}, {artPiece.year}</p>
-        <p className='art-card-price'>${artPiece.price.toLocaleString()}</p>
+        <p className='art-card-price'>{priceLabel}</p>
       </div>
+
       <div className='art-card-actions'>
         <Link to={`/art/details/${artPiece._id}`}>
           <BsInfoCircle />
         </Link>
-        {/* Conditionally render the Edit and Delete icons only if the user is the owner */}
+
+        {/* shows edit/delete only when user owns this item */}
         {isOwner && (
           <>
             <Link to={`/art/edit/${artPiece._id}`}>
@@ -35,7 +56,6 @@ const ArtCard = ({ artPiece }) => {
             </Link>
           </>
         )}
-        {/* === END AUTHORIZATION CHECK === */}
       </div>
     </div>
   );

@@ -5,14 +5,12 @@ import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
-// Helper function to generate a JWT for a given user ID.
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: '30d',
   });
 };
 
-// Route for registering a new user.
 router.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
@@ -39,7 +37,6 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// Route for authenticating a user and returning a token.
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 

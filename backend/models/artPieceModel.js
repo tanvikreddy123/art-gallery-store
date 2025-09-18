@@ -2,9 +2,6 @@ import mongoose from 'mongoose';
 
 const artPieceSchema = mongoose.Schema(
   {
-    // The 'user' field links each art piece to its creator.
-    // 'ref: 'User'' establishes a formal relationship with the User model,
-    // which is crucial for authorization and populating user data.
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,

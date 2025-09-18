@@ -15,8 +15,6 @@ const userSchema = mongoose.Schema({
     timestamps: true
 });
 
-// This Mongoose pre-save hook automatically hashes the user's password
-// before it is saved to the database. This ensures we never store plain-text passwords.
 userSchema.pre('save', async function(next) {
     if (!this.isModified('password')) {
         next();
@@ -25,8 +23,6 @@ userSchema.pre('save', async function(next) {
     this.password = await bcrypt.hash(this.password, salt);
 });
 
-/// This instance method allows for comparing a candidate password with the
-// hashed password stored in the database during the login process.
 userSchema.methods.matchPassword = async function(enteredPassword) {
     return await bcrypt.compare(enteredPassword, this.password);
 };
