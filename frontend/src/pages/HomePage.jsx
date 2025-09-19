@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api/axiosConfig';
 import Spinner from '../components/layout/Spinner';
 import ArtCard from '../components/art/ArtCard';
 
@@ -7,11 +7,10 @@ const HomePage = () => {
   const [artPieces, setArtPieces] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // The useEffect hook fetches the art collection from the API when the component mounts.
   useEffect(() => {
     setLoading(true);
-    axios
-      .get('/api/artpieces')
+    api
+      .get('/artpieces')
       .then((response) => {
         setArtPieces(response.data.data);
         setLoading(false);

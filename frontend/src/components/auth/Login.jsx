@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../api/axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
@@ -11,7 +11,7 @@ const Login = () => {
 
     const handleLogin = (e) => {
         e.preventDefault();
-        axios.post('/api/auth/login', { username, password })
+        api.post('/auth/login', { username, password })
             .then(response => {
 
                 localStorage.setItem('token', response.data.token);

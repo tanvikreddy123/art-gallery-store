@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api/axiosConfig';
 import { useParams } from 'react-router-dom';
 import Spinner from '../components/layout/Spinner';
 
@@ -10,8 +10,8 @@ const ViewArtPage = () => {
 
   useEffect(() => {
     setLoading(true);
-    axios
-      .get(`/api/artpieces/${id}`)
+    api
+      .get(`/artpieces/${id}`)
       .then((response) => {
         setArtPiece(response.data);
         setLoading(false);

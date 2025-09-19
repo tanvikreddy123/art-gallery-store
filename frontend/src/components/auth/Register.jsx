@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../../api/axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 
@@ -11,7 +11,7 @@ const Register = () => {
 
     const handleRegister = (e) => {
         e.preventDefault();
-        axios.post('/api/auth/register', { username, password })
+        api.post('/auth/register', { username, password })
             .then(() => {
                 enqueueSnackbar('Registration successful! Please log in.', { variant: 'success' });
                 navigate('/login');
