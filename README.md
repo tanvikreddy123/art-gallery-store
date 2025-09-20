@@ -1,101 +1,130 @@
 # MERN Full-Stack Art Gallery Store
 
-A complete full-stack web application built from the ground up using the MERN stack (MongoDB, Express.js, React.js, Node.js). This project is an online gallery store where users can register, log in, and showcase art pieces. It features a secure RESTful API with robust user authentication and authorization.
+A full-stack MERN web application for an online art gallery store, featuring a secure Node.js/Express RESTful API with JWT authentication, owner-based authorization, and a dynamic React UI for managing art listings.
+
+### Live Demo
+
+- **Frontend:** [https://art-gallery-frontend-4at0.onrender.com](https://art-gallery-frontend-4at0.onrender.com)
+- **API Base:** [https://art-gallery-backend-k6co.onrender.com/api](https://art-gallery-backend-k6co.onrender.com/api)
 
 ---
+
 ### Features
 
-- **User Authentication:** Secure user registration and login using JSON Web Tokens (JWT).
-- **Full CRUD Functionality:** Authenticated users can Create, Read, Update, and Delete their own art piece listings.
-- **Authorization:** A user can only edit or delete the art pieces that they have personally created.
-- **Protected API Routes:** Backend middleware prevents unauthorized access to modification endpoints.
-- **Dynamic UI:** The navigation bar and action buttons on art cards render conditionally based on the user's authentication status and ownership of the content.
-- **RESTful API:** A well-structured backend API built with Express.js and Mongoose.
+- **Auth:** Register/Login with JWT, token stored client-side.
+- **CRUD:** Create, read, update, and delete art pieces you own.
+- **Authorization:** Only the creator can edit/delete their pieces.
+- **Protected routes:** Express middleware validates tokens & ownership.
+- **Polished UI:** Conditional buttons, dark theme, toasts.
+- **REST API:** Clean endpoints with Mongoose models.
 
 ---
 
 ### Tech Stack
 
 #### **Backend**
-- **Node.js:** JavaScript runtime environment.
-- **Express.js:** Web framework for Node.js.
-- **MongoDB:** NoSQL database for storing data.
-- **Mongoose:** Object Data Modeling (ODM) library for MongoDB.
-- **JWT (jsonwebtoken):** For creating and verifying user tokens.
-- **bcrypt.js:** For hashing user passwords.
-- **dotenv:** For managing environment variables.
+
+- Node, Express, MongoDB (Atlas), Mongoose
+- jsonwebtoken, bcryptjs, dotenv, cors
 
 #### **Frontend**
-- **React.js:** JavaScript library for building user interfaces.
-- **React Router:** For client-side routing and navigation.
-- **Axios:** For making HTTP requests to the backend API.
-- **Vite:** Next-generation frontend tooling for a fast development experience.
-- **Notistack:** For displaying toast notifications/alerts.
+
+- React (Vite), React Router
+- Axios (single configured instance)
+- notistack for toasts
 
 ---
 
-### Getting Started (Local Setup)
+### Quick Start (Local)
 
-Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
-
-#### **Prerequisites**
-- Node.js (v18 or later)
-- npm (Node Package Manager)
-- A free MongoDB Atlas account for the database.
-
-#### **Installation**
-
-1.  **Clone the repository:**
+1.  **Clone & install**
     ```bash
-    git clone https://github.com/[Your-GitHub-Username]/[Your-Repo-Name].git
+    git clone https://github.com/tanvikreddy123/art-gallery-store.git
     cd art-gallery-store
     ```
 
-2.  **Setup the Backend:**
-    ```bash
-    # Navigate to the backend directory
-    cd backend
+2.  **Backend**
+    - Navigate to the backend directory and install dependencies:
+      ```bash
+      cd backend
+      npm install
+      ```
+    - Create a `backend/.env` file:
+      ```env
+      PORT=5555
+      MONGO_URI=your_mongodb_connection_string
+      JWT_SECRET=your_strong_random_jwt_secret
+      # When deployed, set this to your frontend URL (no trailing slash),
+      # e.g. https://art-gallery-frontend-xxxx.onrender.com
+      CLIENT_URL=http://localhost:5173
+      ```
+    - Run the backend server:
+      ```bash
+      npm run dev
+      # server -> http://localhost:5555
+      ```
 
-    # Install dependencies
-    npm install
+3.  **Frontend**
+    - Navigate to the frontend directory and install dependencies:
+      ```bash
+      cd ../frontend
+      npm install
+      ```
+    - Create a `frontend/.env` file (for local development):
+      ```env
+      VITE_API_BASE_URL=http://localhost:5555
+      ```
+    - Run the frontend application:
+      ```bash
+      npm run dev
+      # app -> http://localhost:5173
+      ```
 
-    # Create a .env file in the /backend directory
-    # and add the following variables:
-    touch .env
-    ```
-    Your `backend/.env` file should look like this:
-    ```
-    PORT=5555
-    MONGO_URI="your_mongodb_connection_string"
-    JWT_SECRET="your_strong_random_jwt_secret"
-    ```
 
-3.  **Setup the Frontend:**
-    ```bash
-    # Navigate to the frontend directory from the root
-    cd frontend
+### Deployment (Render)
 
-    # Install dependencies
-    npm install
-    ```
+#### **Backend (Web Service)**
 
-#### **Running the Application**
+-   **Source:** repo root, **Root Directory:** `backend`
+-   **Build Command:** `npm install`
+-   **Start Command:** `npm start` (or `node server.js`)
+-   **Environment**
+    -   `MONGO_URI` – your Atlas connection string
+    -   `JWT_SECRET` – strong random value
+    -   `CLIENT_URL` – your frontend URL, e.g. `https://art-gallery-frontend-xxxx.onrender.com`
+-   **(optional)** `NODE_VERSION=22.19.0` (or your local version)
 
-You will need two separate terminals to run both the backend and frontend servers.
+*When live you should see a log like `Server running on port XXXX and MongoDB Connected: ....`*
 
-1.  **Run the Backend Server:**
-    ```bash
-    # In the /backend directory
-    npm run dev
-    ```
-    The server will start on `http://localhost:5555`.
+#### **Frontend (Static Site)**
 
-2.  **Run the Frontend Application:**
-    ```bash
-    # In the /frontend directory
-    npm run dev
-    ```
-    The React application will start on `http://localhost:5173`. Open this URL in your browser to use the app.
+-   **Source:** same repo, **Root Directory:** `frontend`
+-   **Build Command:** `npm install && npm run build`
+-   **Publish Directory:** `dist`
+-   **Redirect/Rewrite rule (SPA):**
+    -   **Source:** `/*`
+    -   **Destination:** `/index.html`
+    -   **Action:** Rewrite
+-   **Environment**
+    -   `VITE_API_BASE_URL=https://art-gallery-backend-xxxx.onrender.com` (origin only; the app appends `/api`)
+
+*Any time you change frontend env vars on Render, use **Manual Deploy → Clear build cache & deploy**, then hard-refresh the site.*
 
 ---
+
+### Scripts
+
+#### **Backend**
+
+-   `npm run dev` – nodemon
+-   `npm start` – production
+
+#### **Frontend**
+
+-   `npm run dev` – Vite dev server
+-   `npm run build` – production build
+-   `npm run preview` – preview build locally
+
+---
+
 *Project by Tanvik Reddy Kotha*
